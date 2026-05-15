@@ -1,122 +1,132 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useMemo, useEffect, useCallBack } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+// Mock Data //
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
-
-export default App
+const MOCK_JOBS = [
+  {
+    id: "job-1",
+    customerName: "Marcus Webb",
+    phone: "312-555-0182",
+    plateNumber: "KXT-482",
+    year: 2021,
+    make: "Acura",
+    model: "NSX Type-S",
+    color: "Gotham Gray Matte Metallic",
+    serviceType: "tint",
+    serviceDetail: "Full Cermaic Tint - 20%",
+    status: "intake",
+    priority: "normal",
+    createdAt: "2026-05-10",
+    dueDate: "2026-05-14",
+    technician: "Xaiver H.",
+    notes: "Customer wants darkest legal tint. Check local ordinance first.",
+  },
+  {
+    id: "job-2",
+    customerName: "Sofia Reyes",
+    phone: "773-555-0294",
+    plateNumber: "MPR-719",
+    year: 2023,
+    make: "Ferrai",
+    model: "296 GTB",
+    color: "Rosso Corsa",
+    serviceType: "wrap",
+    serviceDetail: "Full Body Wrap - Matte Olive",
+    status: "in-progress",
+    priority: "high",
+    createdAt: "2026-05-09",
+    dueDate: "2026-05-13",
+    technician: "Julian B.",
+    notes: "Partial panels already done. Finishing hood and roof today.",
+  },
+  {
+    id: "job-3",
+    customerName: "James Okafor",
+    phone: "847-555-0371",
+    plateNumber: "WLB-356",
+    year: 2020,
+    make: "Porsche",
+    model: "911 GT3 RS",
+    color: "Python Green",
+    serviceType: "tint",
+    serviceDetail: "Windshielf + Front Windows - 35%",
+    status: "in-progress",
+    priority: "normal",
+    createdAt: "2026-05-11",
+    dueDate: "2026-05-15",
+    technician: "Xaiver H.",
+    notes: "",
+  },
+  {
+    id: "job-4",
+    customerName: "Priya Nair",
+    phone: "630-555-0445",
+    plateNumber: "JVF-804",
+    year: 2020,
+    make: "Chevrolet",
+    model: "Corvette Z06",
+    color: "Amplify Orange Tintcoat",
+    serviceType: "wrap",
+    serviceDetail: "Roof Wrap - Gloss Carbon Fiber",
+    status: "quality-check",
+    priority: "normal",
+    createdAt: "2026-05-08",
+    dueDate: "2026-05-13",
+    technician: "Julian B.",
+    notes: "Inspect edges on A-pillar. Customer is very detail-oriented.",
+  },
+  {
+    id: "job-5",
+    customerName: "Terrence Hall",
+    phone: "321-550-0519",
+    plateNumber: "DZN-261",
+    year: 2019,
+    make: "Lamborghini",
+    model: "Revuelto",
+    color: "Viola Pasifae",
+    serviceType: "tint",
+    serviceDetail: "Full Vehicle Tint - 5% Limo",
+    status: "complete",
+    priority: "low",
+    createdAt: "2026-05-07",
+    dueDate: "2026-05-12",
+    technician: "Xaiver H.",
+    notes: "Picked up. Customer left 5-star review.",
+  },
+  {
+    id: "job-6",
+    customerName: "Aaliyah Brooks",
+    phone: "773-555-0623",
+    plateNumber: "RSH-537",
+    year: 2024,
+    make: "Aston Martin",
+    model: "Vantage",
+    color: "Podium Green",
+    serviceType: "wrap",
+    serviceDetail: "Full Body Wrap - Satin Black",
+    status: "intake",
+    priority: "high",
+    createdAt: "2026-05-12",
+    dueDate: "2026-05-17",
+    technician: "Unassigned",
+    notes: "High-value vehicle. Assign senior tech.",
+  },
+  {
+    id: "job-7",
+    customerName: "Derek Lim",
+    phone: "847-555-0701",
+    plateNumber: "GBC-948",
+    year: 2021,
+    make: "Nissan",
+    model: "GTR",
+    color: "Bayside Blue",
+    serviceType: "tint",
+    serviceDetail: "Rear Windows Only - 20%",
+    status: "complete",
+    priority: "low",
+    createdAt: "2026-05-06",
+    dueDate: "2026-05-10",
+    technician: "Julian B.",
+    notes: "",
+  },
+];
