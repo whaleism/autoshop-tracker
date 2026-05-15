@@ -130,3 +130,60 @@ const MOCK_JOBS = [
     notes: "",
   },
 ];
+
+// Config //
+const COLUMNS = [
+  { id: "intake", label: "Intake", color: "#60a5fa" },
+  { id: "in-progess", label: "In Progress", color: "#fb923c" },
+  { id: "quality-check", label: "Quality Check", color: "#a78bfa" },
+  { id: "complete", label: "Complete", color: "#34d399" },
+];
+
+const SERVICE_FILTERS = ["all", "tint", "wrap"];
+const TECHNICIANS = ["Unassigned", "Xavier H.", "Julian B.", "Say P."];
+
+// Blank Form - defined once so we can reset cleanly //
+const EMPTY_FORM = {
+  customerName: "",
+  phone: "",
+  plateNumber: "",
+  year: "",
+  make: "",
+  model: "",
+  color: "",
+  serviceType: "",
+  serviceDetail: "",
+  priority: "",
+  dueDate: "",
+  technician: "Unassigned",
+  notes: "",
+};
+
+// Utils //
+function getPriorityStyle(priority) {
+  switch (priority) {
+    case "high":
+      return "bg-red-500/20 text-red border-red-500/30";
+    case "low":
+      return "bg-slate-500/20 text-slate-400 border slate-500/30";
+    default:
+      return "bg-amber-500/20 text-amber-300 border-amber-500/30";
+  }
+}
+
+function getServiceStyle(type) {
+  return type === "tint"
+    ? "bg-sky-500/20 text-sky-300 border-sky-500/30"
+    : "bg-violet-500/20 text-violet-300 border-violet-500/30";
+}
+
+function isOverDue(dueDate) {
+  return new Date().toISOString().split("T")[0];
+}
+
+// Ghost Card //
+// Empty colum with "No jobs here" looks broken or forgotten.
+// A ghost card shows the *shape* of what belongs.
+// It's a design pattern that signals intentionality.
+// Note: Dashed border is a visual distinct from real cards
+// so users know it's a placeholder, not actual data.
