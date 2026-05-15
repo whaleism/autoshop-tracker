@@ -196,9 +196,37 @@ function GhostCard() {
       <div className="h-3 w-14 bg-slate-700/50 rounded mb-4" />
       <div className="h-3 w-full bg-slate-700/40 rounded mb-1" />
       <div className="h-3 w-2/3 bg-slate-700/40 rounded mb-4" />
-      <div className="flex justify-between pt-3 border-t border-slate-700/40"></div>
-      <div className="h-3 w-16 bg-slate-700/50 rounded" />
-      <div className="h-3 w-12 bg-slate-700/50 rounded" />
+      <div className="flex justify-between pt-3 border-t border-slate-700/40">
+        <div className="h-3 w-16 bg-slate-700/50 rounded" />
+        <div className="h-3 w-12 bg-slate-700/50 rounded" />
+      </div>
+    </div>
+  );
+}
+
+// Skelton Card
+// Shown WHILE data is loading from the API
+// Animate-pulse signals: "something's coming"
+// Distinction from GhostCard:
+//  GhostCard = column has no data (permanent for now)
+//  SkeletonCard = data is on its way (temporary loading state)
+
+function SkeletonCard() {
+  return (
+    <div className="bg-slate-800 border border-slate-700/60 rounded-xl p-4 animate-pulse">
+      <div className="flex justify-between mb-3">
+        <div className="h-4 w-12 bg-slate-700 rounded-full" />
+        <div className="h-4 w-10 bg-slate-700 rounded-full" />
+      </div>
+      <div className="h-4 w-32 bg-slate-700 rounded mb-2" />
+      <div className="h-3 w-24 bg-slate-700/70 rounded mb-1" />
+      <div className="h-3 w-16 bg-slate-700/50 rounded mb-4" />
+      <div className="h-3 w-full bg-slate-700/40 rounded mb-1" />
+      <div className="h-3 w-3/4 bg-slate-700/40 rounded mb-4" />
+      <div className="flex justify-between pt-3 border-t border-slate-700/50">
+        <div className="h-3 w-16 bg-slate-700/50 rounded" />
+        <div className="h-3 w-14 bg-slate-700/50 rounded" />
+      </div>
     </div>
   );
 }
