@@ -49,7 +49,7 @@ const MOCK_JOBS = [
     model: "911 GT3 RS",
     color: "Python Green",
     serviceType: "tint",
-    serviceDetail: "Windshielf + Front Windows - 35%",
+    serviceDetail: "Windshield + Front Windows - 35%",
     status: "in-progress",
     priority: "normal",
     createdAt: "2026-05-11",
@@ -151,9 +151,9 @@ const EMPTY_FORM = {
   make: "",
   model: "",
   color: "",
-  serviceType: "",
+  serviceType: "tint",
   serviceDetail: "",
-  priority: "",
+  priority: "normal",
   dueDate: "",
   technician: "Unassigned",
   notes: "",
@@ -161,14 +161,10 @@ const EMPTY_FORM = {
 
 // Utils //
 function getPriorityStyle(priority) {
-  switch (priority) {
-    case "high":
-      return "bg-red-500/20 text-red border-red-500/30";
-    case "low":
-      return "bg-slate-500/20 text-slate-400 border slate-500/30";
-    default:
-      return "bg-amber-500/20 text-amber-300 border-amber-500/30";
-  }
+  if (priority === "high") return "bg-red-500/20 text-red border-red-500/30";
+  if (priority === "low")
+    return "bg-slate-500/20 text-slate-400 border slate-500/30";
+  return "bg-amber-500/20 text-amber-300 border-amber-500/30";
 }
 
 function getServiceStyle(type) {
@@ -178,12 +174,31 @@ function getServiceStyle(type) {
 }
 
 function isOverDue(dueDate) {
-  return new Date().toISOString().split("T")[0];
+  return new Date(dueDate) < new Date(new Date().toDateString());
 }
 
-// Ghost Card //
-// Empty colum with "No jobs here" looks broken or forgotten.
-// A ghost card shows the *shape* of what belongs.
-// It's a design pattern that signals intentionality.
-// Note: Dashed border is a visual distinct from real cards
-// so users know it's a placeholder, not actual data.
+// Ghost Card
+// Shown when a column has zero jobs. Shows the *shape* of what belongs there
+// This is much better than "No jobs here" because it can confuse a user and look like a bug
+
+function GhostCard() {
+  return (
+    <div
+      aria-hidden="true"
+      className="border-2 border-dashed border-slate-700/50 rounded-xl p-4 opacity-40 pointer-events-none select-none"
+    >
+      <div className="flex justify-between mb-3">
+        <div className="h-4 w-12 bg-slate-700 rounded-full" />
+        <div className="h-4 w-10 bg-slate-700 rounded-full" />
+      </div>
+      <div className="h-4 w-28 bg-slate-700 rounded mb-2" />
+      <div className="h-3 w-20 bg-slate-700/70 rounded mb-1" />
+      <div className="h-3 w-14 bg-slate-700/50 rounded mb-4" />
+      <div className="h-3 w-full bg-slate-700/40 rounded mb-1" />
+      <div className="h-3 w-2/3 bg-slate-700/40 rounded mb-4" />
+      <div className="flex justify-between pt-3 border-t border-slate-700/40"></div>
+      <div className="h-3 w-16 bg-slate-700/50 rounded" />
+      <div className="h-3 w-12 bg-slate-700/50 rounded" />
+    </div>
+  );
+}
