@@ -113,6 +113,25 @@ const MOCK_JOBS = [
   },
   {
     id: "job-7",
+    customerName: "Nadia Petrov",
+    phone: "312-555-0834",
+    plateNumber: "THZ-641",
+    year: 2023,
+    make: "Audi",
+    model: "R8 V10 Performance",
+    color: "Nardo Gray",
+    serviceType: "ppf",
+    serviceDetail: "Full Front PPF - Self-healing Matte",
+    status: "quality-check",
+    priority: "high",
+    createAt: "2026-05-13",
+    dueDate: "2026-05-16",
+    technician: "Say P.",
+    notes:
+      "High-gloss paint underneath. Handle with extra care during install.",
+  },
+  {
+    id: "job-8",
     customerName: "Derek Lim",
     phone: "847-555-0701",
     plateNumber: "GBC-948",
@@ -139,7 +158,7 @@ const COLUMNS = [
   { id: "complete", label: "Complete", color: "#34d399" },
 ];
 
-const SERVICE_FILTERS = ["all", "tint", "wrap"];
+const SERVICE_FILTERS = ["all", "tint", "wrap", "ppf"];
 const TECHNICIANS = ["Unassigned", "Xavier H.", "Julian B.", "Say P."];
 
 // Blank Form - defined once so we can reset cleanly //
@@ -168,15 +187,21 @@ function getPriorityStyle(priority) {
 }
 
 function getServiceStyle(type) {
-  return type === "tint"
-    ? "bg-sky-500/20 text-sky-300 border-sky-500/30"
-    : "bg-violet-500/20 text-violet-300 border-violet-500/30";
+  if (type === "tint") return "bg-sky-500/20 text-sky-300 border-sky-500/30";
+  if (type === "wrap")
+    return "bg-violet-500/20 text-violet-300 border-violet-500/30";
+  if (type === "ppf")
+    return "bg-amber-500/20 text-amber-300 border-amber-500/30";
+  return "bg-slate-500/20 text-slate-400 border-slate-500/30";
 }
 
 function isOverDue(dueDate) {
   return new Date(dueDate) < new Date(new Date().toDateString());
 }
 
+function todayISO() {
+  return new Date().toISOString().split("T")[0];
+}
 // Ghost Card
 // Shown when a column has zero jobs. Shows the *shape* of what belongs there
 // This is much better than "No jobs here" because it can confuse a user and look like a bug
