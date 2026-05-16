@@ -255,3 +255,17 @@ function SkeletonCard() {
     </div>
   );
 }
+
+// Stat Card //
+function StatCard({ label, value, accent }) {
+  return (
+    <div className="flex flex-col gap-1 bg-slate-800/60 border border-slate-700/50 rounded-xl px-5 py-4 min-w-[110px]">
+      <span className="text-2xl font-bold" style={{ color: accent }}>
+        {value}
+      </span>
+      <span className="text-xs text-slate-400 uppercase tracking-widest">
+        {label}
+      </span>
+    </div>
+  );
+}
