@@ -318,6 +318,27 @@ function JobCard({ job, onClick }) {
 }
 
 // Kanban Column //
-function KanbanColumn({}) {
-  return;
+function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
+  return (
+    <div className="flex flex-col min-w-[280px] w-full md:w-72 lg:flex-1">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3 px-1">
+        <div className="flex items-center gap-2">
+          <span
+            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+            style={{ backgroundColor: column.color }}
+          />
+          <h2 className="text-sm font-semibold text-slate-200 uppercase tracking-wider">
+            {column.label}
+          </h2>
+        </div>
+        <span
+          className="text-xs font-bold px-2 py-0.5 rounded-full"
+          style={{ backgroundColor: column.color + "25", color: column.color }}
+        >
+          {isLoading ? "-" : jobs.length}
+        </span>
+      </div>
+    </div>
+  );
 }
