@@ -269,3 +269,50 @@ function StatCard({ label, value, accent }) {
     </div>
   );
 }
+
+// Job Card //
+function JobCard({ job, onClick }) {
+  const overdue = job.status !== "complete" && isOverDue(job.dueDate);
+
+  return (
+    <div
+      onClick={() => onClick(job)}
+      className="group bg-slate-800 border border-slate-700/60 rounded-xl p-4
+                cursor-pointer hover:border-slate-500 hover:-translate-y-0.5
+                transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-black/30"
+    >
+      <div className="flex items-center justify-between-mb-3">
+        <span
+          className={`text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full border ${getPriorityStyle(job.priority)}`}
+        >
+          {job.priority}
+        </span>
+        <span
+          className={`text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full border ${getServiceStyle(job.serviceType)}`}
+        >
+          {job.serviceType}
+        </span>
+      </div>
+
+      <p className="text-sm font-semibold text-slate-100 leading-tight">
+        {job.customerName}
+      </p>
+      <p className="text-xs text-slate-400 mt-0.5">
+        {job.year} {job.make} {job.model}
+      </p>
+      <p className="text-xs text-slate-500 font-mono mt-1">{job.plateNumber}</p>
+      <p className="text-xs text-slate-300 mt-3 leading-snug border-1-2 border-slate-600 pl-2">
+        {job.serviceDetail}
+      </p>
+
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-700/50">
+        <span
+          className={`text-[11px] font-medium ${overdue ? "text-red-400" : "text-slate-400"}`}
+        >
+          {overdue ? "⚠ " : ""}Due {job.dueDate}
+        </span>
+        <span className="text-[11px] text-slate-500">{job.technician}</span>
+      </div>
+    </div>
+  );
+}
