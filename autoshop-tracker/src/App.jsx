@@ -316,3 +316,8 @@ function JobCard({ job, onClick }) {
     </div>
   );
 }
+
+// Kanban Column //
+function KanbanColumn({}) {
+  return;
+}
