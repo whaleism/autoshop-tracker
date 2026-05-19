@@ -341,6 +341,19 @@ function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
       </div>
 
       {/* Cards Area */}
+      <div className="flex flex-col gap-3 flex-1 bg-slate-900/40 border border-slate-700/30 rounded-xl p-3 min-h-[200px]">
+        {isLoading ? (
+          [1, 2].map((n) => <SkeletonCard key={n} />)
+        ) : jobs.length === 0 ? (
+          <GhostCard />
+        ) : (
+          jobs.map((job) => (
+            <JobCard key={job.id} job={job} onClick={onCardClick} />
+          ))
+        )}
+      </div>
     </div>
   );
 }
+
+// Success message when submitting form //
