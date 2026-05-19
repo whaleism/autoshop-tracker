@@ -396,3 +396,58 @@ function SuccessToast({ message, onDismiss }) {
     </>
   );
 }
+
+// Intake Form Modal
+// Controlled form
+// Every input's value comes from formData state and every key updates that state via handleChange
+
+function IntakeFormModal({ onClose, onSubmit }) {
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState({});
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
+  }
+
+  function validate() {
+    const required = [
+      "customerName",
+      "phone",
+      "plateNumber",
+      "year",
+      "make",
+      "model",
+      "serviceDetail",
+      "dueDate",
+    ];
+
+    const next = {};
+    required.forEach((field) => {
+      if (!formData[field].toString().trim()) next[field] = "Required";
+    });
+    return next;
+  }
+
+  function handleSubmit() {
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    const newJob = {
+      ...formData,
+      id: `job-${Date.now()}`, // local temd ID
+      status: "intake", // all new jobs start here
+      createdAt: todayISO(),
+      year: parseInt(formData.year, 10),
+    };
+
+    onsubmit(newJob);
+    setFormData(EMPTY_FORM);
+  }
+
+  return <div className=""></div>;
+}
