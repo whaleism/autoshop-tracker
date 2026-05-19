@@ -339,6 +339,8 @@ function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
           {isLoading ? "-" : jobs.length}
         </span>
       </div>
+
+      {/* Cards Area */}
     </div>
   );
 }
