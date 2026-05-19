@@ -356,4 +356,43 @@ function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
   );
 }
 
-// Success message when submitting form //
+// Success Toast
+// Auto dismisses after 4 seconds via useEffect + setTimeout
+// Clean up function (return () => clearTimeout) runs if the component
+// disconnects before the timer completes
+function SuccessToast({ message, onDismiss }) {
+  useEffect(() => {
+    const timer = setTimeout(onDismiss, 4000);
+    return () => clearTimeout(timer);
+  }, [onDismiss]);
+
+  return (
+    <>
+      <style>{`
+      @keyframes slideUp {
+        from { opacity: 0; transform: translate(-50%, 16px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+      }
+    `}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        style={{ animation: "slideUp 0.3s ease-out" }}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50
+                 flex items-center gap-3 px-5 py-3.5 rounded-2xl
+                 bg-emerald-900/90 border border-emerald-500/40
+                 shadow-xl shadow-black/40 backdrop-blur-sm"
+      >
+        <span className="text-emerald-400 text-lg">✓</span>
+        <p className="text-sm font-medium text-emerald-100">{message}</p>
+        <button
+          onClick={onDismiss}
+          aria-label="Dismiss notification"
+          className="text-emerald-400/60 hover:text-emerald-200 ml-1 transition-colors text-xl leading-none"
+        >
+          x
+        </button>
+      </div>
+    </>
+  );
+}
