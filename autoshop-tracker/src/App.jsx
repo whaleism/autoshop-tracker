@@ -512,8 +512,37 @@ function IntakeFormModal({ onClose, onSubmit }) {
                   className={inputCls(errors.make)}
                 />
               </Field>
+              <Field label="Model *" errors={errors.model}>
+                <input
+                  name="model"
+                  value={formData.model}
+                  onChange={handleChange}
+                  placeholder="Camry"
+                  className={inputCls(errors.model)}
+                />
+              </Field>
+              <Field label="Color">
+                <input
+                  name="color"
+                  value={formData.color}
+                  onChange={handleChange}
+                  placeholder="Pearl White"
+                  className={inputCls()}
+                />
+              </Field>
             </div>
+            <Field label="Plate Number *" error={errors.plateNumber}>
+              <input
+                name="plateNumber"
+                value={formData.plateNumber}
+                onChange={handleChange}
+                placeholder="KXT-482"
+                className={`${inputCls(errors.plateNumber)} font-mono uppercase`}
+              />
+            </Field>
           </FormSection>
+
+          <FormSection label="Service Info">{/* TBA */}</FormSection>
         </div>
       </div>
     </div>
