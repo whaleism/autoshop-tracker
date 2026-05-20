@@ -476,7 +476,45 @@ function IntakeFormModal({ onClose, onSubmit }) {
         </div>
 
         {/* Body */}
-        <div className="p-6 space-y-6">{/* TBA */}</div>
+        <div className="p-6 space-y-6">
+          <FormSection label="Customer Info">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field label="Customer Name *" error={errors.customerName}>
+                <input
+                  name="customerName"
+                  value={formData.customerName}
+                  onChange={handleChange}
+                  placeholder="Marcus Webb"
+                  className={inputCls(errors.customerName)}
+                />
+              </Field>
+            </div>
+          </FormSection>
+
+          <FormSection label="Vehicle Info">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <Field label="Year *" error={errors.year}>
+                <input
+                  name="year"
+                  value={formData.year}
+                  onChange={handleChange}
+                  placeholder="2022"
+                  maxLength={4}
+                  className={inputCls(errors.year)}
+                />
+              </Field>
+              <Field label="Make *" error={errors.make}>
+                <input
+                  name="make"
+                  value={formData.make}
+                  onChange={handleChange}
+                  placeholder="Toyota"
+                  className={inputCls(errors.make)}
+                />
+              </Field>
+            </div>
+          </FormSection>
+        </div>
       </div>
     </div>
   );
