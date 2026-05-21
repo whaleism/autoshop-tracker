@@ -668,3 +668,13 @@ function FormSection({ label, children }) {
     </div>
   );
 }
+
+function Field({ label, children, error }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-xs font-medium text-slate-300">{label}</label>
+      {children}
+      {error && <p className="text-xs text-red-400">{error}</p>}
+    </div>
+  );
+}
