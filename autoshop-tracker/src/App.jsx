@@ -851,3 +851,29 @@ ${
     </div>
   );
 }
+
+// Root App
+// State inventory:
+// jobs - full list of all jobs (array[])
+// selectedJobs - job object for detail modal, or null (when closed)
+// toast - string message for success toast or null
+// search - search bar string
+// serviceFilter - "all" | "tint", | "wrap", | "ppf"
+export default function App() {
+  const [jobs, setJobs] = useState(MOCK_JOBS);
+  const [selectedJob, setSelectedJobs] = useState(null);
+  const [showIntakeForm, setShowIntakeForm] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [search, setSearch] = useState("");
+  const [serviceFilter, setServiceFilter] = useState("all");
+
+  // Callback used to keep dismissToast stable when rendering
+  // so SuccessToast's useEffect doesn't restart auto-dismiss timer.
+  const dismissToast = useCallBack(() => setToast(null), []);
+
+  function handleNewJob(newJob) {
+    setJobs((prev) => [newJobs, ...prev]);
+    setShowIntakeForm(false);
+    setToast(`Order for ${newJob.customerName} added to Intake`);
+  }
+}
