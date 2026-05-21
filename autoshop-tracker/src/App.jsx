@@ -749,6 +749,16 @@ function DetailModal({ job, onClose }) {
             <DetailRow label="Due Date" value={job.dueDate} />
             <DetailRow label="Status" value={job.status.replace("-", " ")} />
           </DetailSection>
+          <DetailSection label="Contact">
+            <DetailRow label="Phone" value={job.phone} />
+          </DetailSection>
+          {job.notes && (
+            <DetailSection label="Notes">
+              <p className="text-sm text-slate-300 leading-relaxed">
+                {job.notes}
+              </p>
+            </DetailSection>
+          )}
         </div>
       </div>
     </div>
