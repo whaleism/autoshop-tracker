@@ -556,8 +556,28 @@ function IntakeFormModal({ onClose, onSubmit }) {
                   <option value="ppf">PPF (Paint Protection Film)</option>
                 </select>
               </Field>
-              {/*Priority TBA*/}
+              <Field label="Priority">
+                <select
+                  name="priority"
+                  value={formData.priority}
+                  onClick={handleChange}
+                  className={inputCls()}
+                >
+                  <option value="low">Low</option>
+                  <option value="normal">Normal</option>
+                  <option value="high">High</option>
+                </select>
+              </Field>
             </div>
+            <Field label="Service Detail *" error={errors.serviceDetail}>
+              <input
+                name="serviceDetail"
+                value={formData.serviceDetail}
+                onChange={handleChange}
+                placeholder="e.g Full Ceramic Tint - 20% or Full Body Wrap - Matte Olive"
+                className={inputCls(errors.serviceDetail)}
+              />
+            </Field>
           </FormSection>
         </div>
       </div>
