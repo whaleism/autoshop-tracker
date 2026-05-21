@@ -790,3 +790,32 @@ function DetailRow({ label, value, mono }) {
     </div>
   );
 }
+
+// Toolbar //
+function Toolbar({
+  search,
+  onSearch,
+  serviceFilter,
+  onServiceFilter,
+  onNewOrder,
+}) {
+  return (
+    <div className="flex flex-col sm:flex-row gap-3 mb-6">
+      <div className="relative flex-1">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
+          🔍
+        </span>
+        <input
+          type="text"
+          placeholder="Search by customer or plate number..."
+          value={search}
+          onChange={(e) => onSearch(e.target.value)}
+          className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-4 py-2.5
+        text-sm text-slate-200 placeholder-slate-500
+        focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500
+        transition-colors"
+        />
+      </div>
+    </div>
+  );
+}
