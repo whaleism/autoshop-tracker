@@ -620,6 +620,29 @@ function IntakeFormModal({ onClose, onSubmit }) {
             />
           </FormSection>
         </div>
+
+        {/* Footer */}
+        <div className="flex items-justify justify-between gap-3 px-6 py-4 border-t border-slate-700">
+          <p className="text-xs text-slate-500">* Required fields</p>
+          <div className="flex gap-3">
+            <button
+              onClick={onClose}
+              className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-400
+            border border-slate-700 hover:border-slate-500 hover:text-slate-200
+            transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit}
+              className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white
+            bg-blue-600 hover:bg-blue-500 border border-blue-500
+            shadow-lg shadow-blue-900/20 transition-all"
+            >
+              Submit Order
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
