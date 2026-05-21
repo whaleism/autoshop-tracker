@@ -712,6 +712,26 @@ function DetailModal({ job, onClose }) {
             ✕
           </button>
         </div>
+
+        <div className="p-6 space-y-5">
+          <div className="flex gap-2 flex-wrap">
+            <span
+              className={`text-xs font-semibold px-3 py-1 rounded-full border ${getServiceStyle(job.serviceType)}`}
+            >
+              {job.serviceType.toUpperCase()}
+            </span>
+            <span
+              className={`text-xs font-semibold px-3 py-1 rounded-full border ${getPriorityStyle(job.priority)}`}
+            >
+              {job.priority.toUpperCase()} PRIORITY
+            </span>
+            {isOverDue(job.dueDate) && job.status !== "complete" && (
+              <span className="text-xs font-semibold px-3 py-1 rounded-full border bg-red-500/20 text-red-300 border-red-500/30">
+                OVERDUE
+              </span>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
