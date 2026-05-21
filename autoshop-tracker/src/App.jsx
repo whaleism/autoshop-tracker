@@ -739,7 +739,16 @@ function DetailModal({ job, onClose }) {
             <DetailRow label="Color" value={job.color} />
             <DetailRow label="Plate" value={job.plateNumber} mono />
           </DetailSection>
-          /
+          <DetailSection label="Service">
+            <DetailRow label="Type" value={job.serviceType} />
+            <DetailRow label="Detail" value={job.serviceDetail} />
+            <DetailRow label="Technician" value={job.technician} />
+          </DetailSection>
+          <DetailSection label="Schedule">
+            <DetailRow label="Created" value={job.createdAt} />
+            <DetailRow label="Due Date" value={job.dueDate} />
+            <DetailRow label="Status" value={job.status.replace("-", " ")} />
+          </DetailSection>
         </div>
       </div>
     </div>
