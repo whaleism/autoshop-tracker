@@ -542,7 +542,23 @@ function IntakeFormModal({ onClose, onSubmit }) {
             </Field>
           </FormSection>
 
-          <FormSection label="Service Info">{/* TBA */}</FormSection>
+          <FormSection label="Service Info">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field label="Service Type">
+                <select
+                  name="serviceType"
+                  value={formData.serviceType}
+                  onChange={handleChange}
+                  className={inputCls()}
+                >
+                  <option value="tint">Tint</option>
+                  <option value="wrap">Wrap</option>
+                  <option value="ppf">PPF (Paint Protection Film)</option>
+                </select>
+              </Field>
+              {/*Priority TBA*/}
+            </div>
+          </FormSection>
         </div>
       </div>
     </div>
