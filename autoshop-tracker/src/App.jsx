@@ -816,6 +816,38 @@ function Toolbar({
         transition-colors"
         />
       </div>
+
+      <div className="flex gap-2">
+        {SERVICE_FILTERS.map((f) => (
+          <button
+            key={f}
+            onClick={() => onServiceFilter(f)}
+            className={`px-4 py-2 rounded-xl text-sm font-medium capitalize border transition-all
+${
+  serviceFilter === f
+    ? "bg-slate-200 text-slate-900 border-slate-200"
+    : "bg-slate-800 text-slate-400 border-slate-700 hover:border-slate-500"
+}`}
+          >
+            {f === "all"
+              ? "All Services"
+              : f === "ppf"
+                ? "PPF"
+                : f.charAt(0).toUpperCase() + f.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <button
+        onClick={onNewOrder}
+        className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+          text-sm font-semiold text-white bg-blue-600 hover:bg-blue-500
+          border border-blue-500 shadow-lg shadow-blue-900/20
+          transition-all whitespace-nowrap"
+      >
+        <span className="text-base leading-none">+</span>
+        New Order
+      </button>
     </div>
   );
 }
