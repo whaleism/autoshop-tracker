@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect, useCallBack } from "react";
 
 // Mock Data //
-
 const MOCK_JOBS = [
   {
     id: "job-1",
@@ -644,6 +643,28 @@ function IntakeFormModal({ onClose, onSubmit }) {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// Form helper - extracted so JSX above stays readable //
+function inputCls(hasError) {
+  return `w-full bg-slate-900/60 border rounded-lg px-3 py-2.5 text-sm text-slate-200
+  placeholder-slate-600 focus:outline-none focus:ring-1 transition-colors
+  ${
+    hasError
+      ? "border-red-500/60 focus:border-red-500 focus:ring-red-500/30"
+      : "border-slate-600 focus:border-slate-400 focus:ring-slate-400/20"
+  }`;
+}
+
+function FormSection({ label, children }) {
+  return (
+    <div>
+      <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-3">
+        {label}
+      </p>
+      <div className="space-y-4">{children}</div>
     </div>
   );
 }
