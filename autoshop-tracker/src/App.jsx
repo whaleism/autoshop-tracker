@@ -764,3 +764,29 @@ function DetailModal({ job, onClose }) {
     </div>
   );
 }
+
+function DetailSection({ label, children }) {
+  return (
+    <div>
+      <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">
+        {label}
+      </p>
+      <div className="bg-slate-900/50 rounded-lg px-4 py-3 space-y-2">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function DetailRow({ label, value, mono }) {
+  return (
+    <div className="flex justify-between items-baseline gap-4">
+      <span className="text-xs text-slate-400 flex-shrink-0">{label}</span>
+      <span
+        className={`text-sm text-slate-200 text-right ${mono ? "font-mono" : ""}`}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
