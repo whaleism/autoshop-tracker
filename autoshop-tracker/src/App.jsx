@@ -731,6 +731,15 @@ function DetailModal({ job, onClose }) {
               </span>
             )}
           </div>
+          <DetailSection label="Vehicle">
+            <DetailRow
+              label="Year / Make / Model"
+              value={`${job.year} ${job.make} ${job.model}`}
+            />
+            <DetailRow label="Color" value={job.color} />
+            <DetailRow label="Plate" value={job.plateNumber} mono />
+          </DetailSection>
+          /
         </div>
       </div>
     </div>
