@@ -608,6 +608,17 @@ function IntakeFormModal({ onClose, onSubmit }) {
               </Field>
             </div>
           </FormSection>
+
+          <FormSection label="Notes (optional)">
+            <textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              rows={3}
+              placeholder="Special instructions or concerns..."
+              className={`${inputCls()} resize-none`}
+            />
+          </FormSection>
         </div>
       </div>
     </div>
