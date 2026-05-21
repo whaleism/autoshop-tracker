@@ -579,6 +579,35 @@ function IntakeFormModal({ onClose, onSubmit }) {
               />
             </Field>
           </FormSection>
+
+          <FormSection label="Scheduling">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field label="Due Date *" errors={errors.dueDate}>
+                <input
+                  type="data"
+                  name="dueDate"
+                  value={formData.dueDate}
+                  onChange={handleChange}
+                  min={todayISO()}
+                  className={inputCls(errors.dueDate)}
+                />
+              </Field>
+              <Field label="Assign Technician">
+                <select
+                  name="technician"
+                  value={formData.technician}
+                  onChange={handleChange}
+                  className={inputCls()}
+                >
+                  {TECHNICIANS.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </div>
+          </FormSection>
         </div>
       </div>
     </div>
