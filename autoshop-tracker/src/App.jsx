@@ -872,8 +872,35 @@ export default function App() {
   const dismissToast = useCallBack(() => setToast(null), []);
 
   function handleNewJob(newJob) {
-    setJobs((prev) => [newJobs, ...prev]);
+    setJobs((prev) => [newJobs, ...prev]); // prepend: new job appears at the top of Intake
     setShowIntakeForm(false);
     setToast(`Order for ${newJob.customerName} added to Intake`);
   }
+
+  // Recalculates only when jobs, search, or serviceFilter change
+  const filteredJobs = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    return jobs.filter((job) => {
+      const matchesSearch =
+        !q ||
+        job.customerName.toLowerCase().includes(q) ||
+        job.plateNumber.toLowerCase().includes(q);
+      const matchesService =
+        serviceFilter === "all" || job.serviceType === serviceFilter;
+      return matchesSearch && matchesService;
+    });
+  }, [jobs, search, serviceFilter]);
+
+  // Stats reflect ALL jobs, not the filter subset
+  const stats = useMemo(
+    () => ({
+      total: jobs.length,
+      inProgress: jobs.filter((j) => j.status === "in-progress").length,
+      overdue: jobs.filter(
+        (j) => j.status !== "complete" && isOverDue(j.dueDate),
+      ).length,
+      complete: jobs.filter((j) => j.status === "complete").length,
+    }),
+    [jobs],
+  );
 }
