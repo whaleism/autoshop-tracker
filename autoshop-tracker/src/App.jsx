@@ -949,6 +949,44 @@ export default function App() {
           onServiceFilter={setServiceFilter}
           onNewOrder={() => setShowIntakeForm(true)}
         />
+
+        {/* Kanban board
+        Responsive:
+        Mobile (<md) - horizontal scroll, 280px min per column
+         Tablet (md) - 2-column grid
+         Desktop (lg+) - all 4 columns side by side */}
+        <div
+          className="flex gap-4 overflow-x-auto pb-4
+        md:grid md:grid-cols-2 md:overflow-visible
+        lg:flex lg:overflow-x-auto"
+        >
+          {COLUMNS.map((col) => (
+            <KanbanColumn
+              key={col.id}
+              column={col}
+              jobs={filteredJobs.filter((j) => j.status === col.id)}
+              onCardClick={setSelectedJobs}
+              // isLoading={isLoading} - Uncomment later when adding backend
+            />
+          ))}
+        </div>
+
+        {/* Global empty state - all columns empty after filtering */}
+        {filteredJobs.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-4xl mb-4">🔍</p>
+            <p className="text-slate-400 text-sm">No jobs match your search</p>
+            <button
+              onClick={() => {
+                setSearch("");
+                setServiceFilter("all");
+              }}
+              className="mt-4 text-xs text-slate-500 underline hover:text-slate-300 transition-colors"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
