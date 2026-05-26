@@ -903,4 +903,53 @@ export default function App() {
     }),
     [jobs],
   );
+
+  return (
+    <div
+      className="min-h-screen bg-slate-950 text-slate-100"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');`}</style>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header*/}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-1">
+            <span className="text-2xl">🚗</span>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Autoshop Tracker
+            </h1>
+          </div>
+          <p className="text-sm text-slate-400 ml-11">
+            Tint & Wrap Job Management —{" "}
+            {new Date().toLocaleDateString("en-US", {
+              weekday: "long",
+              month: "long",
+              day: "numeric ",
+            })}
+          </p>
+        </div>
+
+        {/* Stats Bar */}
+        <div className="flex gap-3 overflow-x-auto pb-2 mb-8">
+          <StatCard label="Total Jobs" value={stats.total} accent="#94a3b8" />
+          <StatCard
+            label="In Progress"
+            value={stats.inProgress}
+            accent="#fb923c"
+          />
+          <StatCard label="Overdue" value={stats.overdue} accent="#f87171" />
+          <StatCard label="Complete" value={stats.complete} accent="#34d399" />
+        </div>
+
+        {/* Search + Filter + New Order button */}
+        <Toolbar
+          search={search}
+          onSearch={setSearch}
+          serviceFilter={serviceFilter}
+          onServiceFilter={setServiceFilter}
+          onNewOrder={() => setShowIntakeForm(true)}
+        />
+      </div>
+    </div>
+  );
 }
