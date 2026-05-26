@@ -280,7 +280,7 @@ function JobCard({ job, onClick }) {
       onClick={() => onClick(job)}
       className="group bg-slate-800 border border-slate-700/60 rounded-xl p-4
                  cursor-pointer hover:border-slate-500 hover:-translate-y-0.5
-                 transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-black/30"
+                 transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-black/30 text-left"
     >
       <div className="flex items-center justify-between mb-3">
         <span
@@ -925,7 +925,7 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen bg-slate-950 text-slate-100"
+      className="min-h-screen bg-slate-950 text-slate-100 text-left"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');`}</style>
