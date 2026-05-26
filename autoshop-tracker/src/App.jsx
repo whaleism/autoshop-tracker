@@ -897,7 +897,7 @@ export default function App() {
       total: jobs.length,
       inProgress: jobs.filter((j) => j.status === "in-progress").length,
       overdue: jobs.filter(
-        (j) => j.status !== "complete" && isOverDue(j.dueDate),
+        (j) => j.status !== "complete" && isOverdue(j.dueDate),
       ).length,
       complete: jobs.filter((j) => j.status === "complete").length,
     }),
