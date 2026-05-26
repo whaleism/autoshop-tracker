@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallBack } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 
 // Mock Data //
 const MOCK_JOBS = [
@@ -12,7 +12,7 @@ const MOCK_JOBS = [
     model: "NSX Type-S",
     color: "Gotham Gray Matte Metallic",
     serviceType: "tint",
-    serviceDetail: "Full Cermaic Tint - 20%",
+    serviceDetail: "Full Ceramic Tint - 20%",
     status: "intake",
     priority: "normal",
     createdAt: "2026-05-10",
@@ -120,7 +120,7 @@ const MOCK_JOBS = [
     model: "R8 V10 Performance",
     color: "Nardo Gray",
     serviceType: "ppf",
-    serviceDetail: "Full Front PPF - Self-healing Matte",
+    serviceDetail: "Full Front PPF - Self-Healing Matte",
     status: "quality-check",
     priority: "high",
     createAt: "2026-05-13",
@@ -152,7 +152,7 @@ const MOCK_JOBS = [
 // Config //
 const COLUMNS = [
   { id: "intake", label: "Intake", color: "#60a5fa" },
-  { id: "in-progess", label: "In Progress", color: "#fb923c" },
+  { id: "in-progress", label: "In Progress", color: "#fb923c" },
   { id: "quality-check", label: "Quality Check", color: "#a78bfa" },
   { id: "complete", label: "Complete", color: "#34d399" },
 ];
@@ -178,23 +178,21 @@ const EMPTY_FORM = {
 };
 
 // Utils //
-function getPriorityStyle(priority) {
-  if (priority === "high") return "bg-red-500/20 text-red border-red-500/30";
-  if (priority === "low")
-    return "bg-slate-500/20 text-slate-400 border slate-500/30";
+function getPriorityStyle(p) {
+  if (p === "high") return "bg-red-500/20 text-red border-red-500/30";
+  if (p === "low") return "bg-slate-500/20 text-slate-400 border slate-500/30";
   return "bg-amber-500/20 text-amber-300 border-amber-500/30";
 }
 
-function getServiceStyle(type) {
-  if (type === "tint") return "bg-sky-500/20 text-sky-300 border-sky-500/30";
-  if (type === "wrap")
+function getServiceStyle(t) {
+  if (t === "tint") return "bg-sky-500/20 text-sky-300 border-sky-500/30";
+  if (t === "wrap")
     return "bg-violet-500/20 text-violet-300 border-violet-500/30";
-  if (type === "ppf")
-    return "bg-amber-500/20 text-amber-300 border-amber-500/30";
+  if (t === "ppf") return "bg-amber-500/20 text-amber-300 border-amber-500/30";
   return "bg-slate-500/20 text-slate-400 border-slate-500/30";
 }
 
-function isOverDue(dueDate) {
+function isOverdue(dueDate) {
   return new Date(dueDate) < new Date(new Date().toDateString());
 }
 
@@ -209,7 +207,8 @@ function GhostCard() {
   return (
     <div
       aria-hidden="true"
-      className="border-2 border-dashed border-slate-700/50 rounded-xl p-4 opacity-40 pointer-events-none select-none"
+      className="border-2 border-dashed border-slate-700/50 rounded-xl p-4
+                 opacity-40 pointer-events-none select-none"
     >
       <div className="flex justify-between mb-3">
         <div className="h-4 w-12 bg-slate-700 rounded-full" />
@@ -258,7 +257,10 @@ function SkeletonCard() {
 // Stat Card //
 function StatCard({ label, value, accent }) {
   return (
-    <div className="flex flex-col gap-1 bg-slate-800/60 border border-slate-700/50 rounded-xl px-5 py-4 min-w-[110px]">
+    <div
+      className="flex flex-col gap-1 bg-slate-800/60 border border-slate-700/50
+                    rounded-xl px-5 py-4 min-w-[110px]"
+    >
       <span className="text-2xl font-bold" style={{ color: accent }}>
         {value}
       </span>
@@ -271,16 +273,16 @@ function StatCard({ label, value, accent }) {
 
 // Job Card //
 function JobCard({ job, onClick }) {
-  const overdue = job.status !== "complete" && isOverDue(job.dueDate);
+  const overdue = job.status !== "complete" && isOverdue(job.dueDate);
 
   return (
     <div
       onClick={() => onClick(job)}
       className="group bg-slate-800 border border-slate-700/60 rounded-xl p-4
-                cursor-pointer hover:border-slate-500 hover:-translate-y-0.5
-                transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-black/30"
+                 cursor-pointer hover:border-slate-500 hover:-translate-y-0.5
+                 transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-black/30"
     >
-      <div className="flex items-center justify-between-mb-3">
+      <div className="flex items-center justify-between mb-3">
         <span
           className={`text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full border ${getPriorityStyle(job.priority)}`}
         >
@@ -300,7 +302,7 @@ function JobCard({ job, onClick }) {
         {job.year} {job.make} {job.model}
       </p>
       <p className="text-xs text-slate-500 font-mono mt-1">{job.plateNumber}</p>
-      <p className="text-xs text-slate-300 mt-3 leading-snug border-1-2 border-slate-600 pl-2">
+      <p className="text-xs text-slate-300 mt-3 leading-snug border-l-2 border-slate-600 pl-2">
         {job.serviceDetail}
       </p>
 
@@ -316,7 +318,9 @@ function JobCard({ job, onClick }) {
   );
 }
 
-// Kanban Column //
+// Kanban Column
+// isLoading: when true, it will render SkeletonCards instead of real cards
+// This will run when passing isLoading={isLoading} //
 function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
   return (
     <div className="flex flex-col min-w-[280px] w-full md:w-72 lg:flex-1">
@@ -335,12 +339,15 @@ function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
           className="text-xs font-bold px-2 py-0.5 rounded-full"
           style={{ backgroundColor: column.color + "25", color: column.color }}
         >
-          {isLoading ? "-" : jobs.length}
+          {isLoading ? "—" : jobs.length}
         </span>
       </div>
 
       {/* Cards Area */}
-      <div className="flex flex-col gap-3 flex-1 bg-slate-900/40 border border-slate-700/30 rounded-xl p-3 min-h-[200px]">
+      <div
+        className="flex flex-col gap-3 flex-1 bg-slate-900/40 border border-slate-700/30
+                      rounded-xl p-3 min-h-[200px]"
+      >
         {isLoading ? (
           [1, 2].map((n) => <SkeletonCard key={n} />)
         ) : jobs.length === 0 ? (
@@ -368,19 +375,19 @@ function SuccessToast({ message, onDismiss }) {
   return (
     <>
       <style>{`
-      @keyframes slideUp {
-        from { opacity: 0; transform: translate(-50%, 16px); }
-        to { opacity: 1; transform: translate(-50%, 0); }
-      }
-    `}</style>
+        @keyframes slideUp {
+          from { opacity: 0; transform: translate(-50%, 16px); }
+          to   { opacity: 1; transform: translate(-50%, 0);    }
+        }
+      `}</style>
       <div
         role="status"
         aria-live="polite"
         style={{ animation: "slideUp 0.3s ease-out" }}
         className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50
-                 flex items-center gap-3 px-5 py-3.5 rounded-2xl
-                 bg-emerald-900/90 border border-emerald-500/40
-                 shadow-xl shadow-black/40 backdrop-blur-sm"
+                  flex items-center gap-3 px-5 py-3.5 rounded-2xl
+                  bg-emerald-900/90 border border-emerald-500/40
+                  shadow-xl shadow-black/40 backdrop-blur-sm"
       >
         <span className="text-emerald-400 text-lg">✓</span>
         <p className="text-sm font-medium text-emerald-100">{message}</p>
@@ -389,7 +396,7 @@ function SuccessToast({ message, onDismiss }) {
           aria-label="Dismiss notification"
           className="text-emerald-400/60 hover:text-emerald-200 ml-1 transition-colors text-xl leading-none"
         >
-          x
+          ×
         </button>
       </div>
     </>
@@ -438,13 +445,13 @@ function IntakeFormModal({ onClose, onSubmit }) {
 
     const newJob = {
       ...formData,
-      id: `job-${Date.now()}`, // local temd ID
+      id: `job-${Date.now()}`, // local temp ID
       status: "intake", // all new jobs start here
       createdAt: todayISO(),
       year: parseInt(formData.year, 10),
     };
 
-    onsubmit(newJob);
+    onSubmit(newJob);
     setFormData(EMPTY_FORM);
   }
 
@@ -454,7 +461,8 @@ function IntakeFormModal({ onClose, onSubmit }) {
       onClick={onClose}
     >
       <div
-        className="bg-slate-800 border border-slate-600/50 rounded-2xl w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="bg-slate-800 border border-slate-600/50 rounded-2xl w-full max-w-2xl
+                   shadow-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -487,6 +495,15 @@ function IntakeFormModal({ onClose, onSubmit }) {
                   className={inputCls(errors.customerName)}
                 />
               </Field>
+              <Field label="Phone *" error={errors.phone}>
+                <input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="312-555-0000"
+                  className={inputCls(errors.phone)}
+                />
+              </Field>
             </div>
           </FormSection>
 
@@ -511,7 +528,7 @@ function IntakeFormModal({ onClose, onSubmit }) {
                   className={inputCls(errors.make)}
                 />
               </Field>
-              <Field label="Model *" errors={errors.model}>
+              <Field label="Model *" error={errors.model}>
                 <input
                   name="model"
                   value={formData.model}
@@ -559,7 +576,7 @@ function IntakeFormModal({ onClose, onSubmit }) {
                 <select
                   name="priority"
                   value={formData.priority}
-                  onClick={handleChange}
+                  onChange={handleChange}
                   className={inputCls()}
                 >
                   <option value="low">Low</option>
@@ -573,7 +590,7 @@ function IntakeFormModal({ onClose, onSubmit }) {
                 name="serviceDetail"
                 value={formData.serviceDetail}
                 onChange={handleChange}
-                placeholder="e.g Full Ceramic Tint - 20% or Full Body Wrap - Matte Olive"
+                placeholder="e.g. Full Ceramic Tint — 20% or Full Body Wrap — Matte Olive"
                 className={inputCls(errors.serviceDetail)}
               />
             </Field>
@@ -581,9 +598,9 @@ function IntakeFormModal({ onClose, onSubmit }) {
 
           <FormSection label="Scheduling">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Due Date *" errors={errors.dueDate}>
+              <Field label="Due Date *" error={errors.dueDate}>
                 <input
-                  type="data"
+                  type="date"
                   name="dueDate"
                   value={formData.dueDate}
                   onChange={handleChange}
@@ -614,29 +631,29 @@ function IntakeFormModal({ onClose, onSubmit }) {
               value={formData.notes}
               onChange={handleChange}
               rows={3}
-              placeholder="Special instructions or concerns..."
+              placeholder="Special instructions or concerns…"
               className={`${inputCls()} resize-none`}
             />
           </FormSection>
         </div>
 
         {/* Footer */}
-        <div className="flex items-justify justify-between gap-3 px-6 py-4 border-t border-slate-700">
+        <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-slate-700">
           <p className="text-xs text-slate-500">* Required fields</p>
           <div className="flex gap-3">
             <button
               onClick={onClose}
               className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-400
-            border border-slate-700 hover:border-slate-500 hover:text-slate-200
-            transition-colors"
+                          border border-slate-700 hover:border-slate-500 hover:text-slate-200
+                          transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white
-            bg-blue-600 hover:bg-blue-500 border border-blue-500
-            shadow-lg shadow-blue-900/20 transition-all"
+                          bg-blue-600 hover:bg-blue-500 border border-blue-500
+                          shadow-lg shadow-blue-900/20 transition-all"
             >
               Submit Order
             </button>
@@ -650,12 +667,12 @@ function IntakeFormModal({ onClose, onSubmit }) {
 // Form helper - extracted so JSX above stays readable //
 function inputCls(hasError) {
   return `w-full bg-slate-900/60 border rounded-lg px-3 py-2.5 text-sm text-slate-200
-  placeholder-slate-600 focus:outline-none focus:ring-1 transition-colors
-  ${
-    hasError
-      ? "border-red-500/60 focus:border-red-500 focus:ring-red-500/30"
-      : "border-slate-600 focus:border-slate-400 focus:ring-slate-400/20"
-  }`;
+          placeholder-slate-600 focus:outline-none focus:ring-1 transition-colors
+          ${
+            hasError
+              ? "border-red-500/60 focus:border-red-500 focus:ring-red-500/30"
+              : "border-slate-600 focus:border-slate-400 focus:ring-slate-400/20"
+          }`;
 }
 
 function FormSection({ label, children }) {
@@ -689,13 +706,14 @@ function DetailModal({ job, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-slate-800 border border-slate-600/50 rounded-2xl w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="bg-slate-800 border border-slate-600/50 rounded-2xl w-full max-w-lg
+                   shadow-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between p-6 border-b border-slate-700">
           <div>
             <p className="text-xs text-slate-400 uppercase tracking-widest mb-1">
-              Job Details
+              Job Detail
             </p>
             <h2 className="text-xl font-bold text-slate-100">
               {job.customerName}
@@ -725,12 +743,13 @@ function DetailModal({ job, onClose }) {
             >
               {job.priority.toUpperCase()} PRIORITY
             </span>
-            {isOverDue(job.dueDate) && job.status !== "complete" && (
+            {isOverdue(job.dueDate) && job.status !== "complete" && (
               <span className="text-xs font-semibold px-3 py-1 rounded-full border bg-red-500/20 text-red-300 border-red-500/30">
                 OVERDUE
               </span>
             )}
           </div>
+
           <DetailSection label="Vehicle">
             <DetailRow
               label="Year / Make / Model"
@@ -807,13 +826,13 @@ function Toolbar({
         </span>
         <input
           type="text"
-          placeholder="Search by customer or plate number..."
+          placeholder="Search by customer or plate number…"
           value={search}
           onChange={(e) => onSearch(e.target.value)}
           className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-4 py-2.5
-        text-sm text-slate-200 placeholder-slate-500
-        focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500
-        transition-colors"
+                    text-sm text-slate-200 placeholder-slate-500
+                    focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500
+                    transition-colors"
         />
       </div>
 
@@ -841,9 +860,9 @@ ${
       <button
         onClick={onNewOrder}
         className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
-          text-sm font-semiold text-white bg-blue-600 hover:bg-blue-500
-          border border-blue-500 shadow-lg shadow-blue-900/20
-          transition-all whitespace-nowrap"
+                    text-sm font-b text-white bg-blue-600 hover:bg-blue-500
+                    border border-blue-500 shadow-lg shadow-blue-900/20
+                    transition-all whitespace-nowrap"
       >
         <span className="text-base leading-none">+</span>
         New Order
@@ -861,7 +880,7 @@ ${
 // serviceFilter - "all" | "tint", | "wrap", | "ppf"
 export default function App() {
   const [jobs, setJobs] = useState(MOCK_JOBS);
-  const [selectedJob, setSelectedJobs] = useState(null);
+  const [selectedJob, setSelectedJob] = useState(null);
   const [showIntakeForm, setShowIntakeForm] = useState(false);
   const [toast, setToast] = useState(null);
   const [search, setSearch] = useState("");
@@ -869,10 +888,10 @@ export default function App() {
 
   // Callback used to keep dismissToast stable when rendering
   // so SuccessToast's useEffect doesn't restart auto-dismiss timer.
-  const dismissToast = useCallBack(() => setToast(null), []);
+  const dismissToast = useCallback(() => setToast(null), []);
 
   function handleNewJob(newJob) {
-    setJobs((prev) => [newJobs, ...prev]); // prepend: new job appears at the top of Intake
+    setJobs((prev) => [newJob, ...prev]); // prepend: new job appears at the top of Intake
     setShowIntakeForm(false);
     setToast(`Order for ${newJob.customerName} added to Intake`);
   }
@@ -891,7 +910,7 @@ export default function App() {
     });
   }, [jobs, search, serviceFilter]);
 
-  // Stats reflect ALL jobs, not the filter subset
+  // Stats reflect ALL jobs, not the filtered subset
   const stats = useMemo(
     () => ({
       total: jobs.length,
@@ -911,12 +930,12 @@ export default function App() {
     >
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');`}</style>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header*/}
+        {/* Page header*/}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-1">
             <span className="text-2xl">🚗</span>
             <h1 className="text-2xl font-bold tracking-tight">
-              Autoshop Tracker
+              AutoShop Tracker
             </h1>
           </div>
           <p className="text-sm text-slate-400 ml-11">
@@ -924,7 +943,7 @@ export default function App() {
             {new Date().toLocaleDateString("en-US", {
               weekday: "long",
               month: "long",
-              day: "numeric ",
+              day: "numeric",
             })}
           </p>
         </div>
@@ -941,7 +960,7 @@ export default function App() {
           <StatCard label="Complete" value={stats.complete} accent="#34d399" />
         </div>
 
-        {/* Search + Filter + New Order button */}
+        {/* Search + filter + new order button */}
         <Toolbar
           search={search}
           onSearch={setSearch}
@@ -957,15 +976,15 @@ export default function App() {
          Desktop (lg+) - all 4 columns side by side */}
         <div
           className="flex gap-4 overflow-x-auto pb-4
-        md:grid md:grid-cols-2 md:overflow-visible
-        lg:flex lg:overflow-x-auto"
+                      md:grid md:grid-cols-2 md:overflow-visible
+                      lg:flex lg:overflow-x-auto"
         >
           {COLUMNS.map((col) => (
             <KanbanColumn
               key={col.id}
               column={col}
               jobs={filteredJobs.filter((j) => j.status === col.id)}
-              onCardClick={setSelectedJobs}
+              onCardClick={setSelectedJob}
               // isLoading={isLoading} - Uncomment later when adding backend
             />
           ))}
@@ -975,7 +994,7 @@ export default function App() {
         {filteredJobs.length === 0 && (
           <div className="text-center py-20">
             <p className="text-4xl mb-4">🔍</p>
-            <p className="text-slate-400 text-sm">No jobs match your search</p>
+            <p className="text-slate-400 text-sm">No jobs match your search.</p>
             <button
               onClick={() => {
                 setSearch("");
@@ -988,6 +1007,18 @@ export default function App() {
           </div>
         )}
       </div>
+
+      {/* Modals rendered outside the scroll container so they overlay everything */}
+      <DetailModal job={selectedJob} onClose={() => setSelectedJob(null)} />
+
+      {showIntakeForm && (
+        <IntakeFormModal
+          onClose={() => setShowIntakeForm(false)}
+          onSubmit={handleNewJob}
+        />
+      )}
+
+      {toast && <SuccessToast message={toast} onDismiss={dismissToast} />}
     </div>
   );
 }
