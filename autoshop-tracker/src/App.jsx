@@ -1,5 +1,13 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import {
+  DndContext,
+  useDraggable,
+  useDroppable,
+  DragOverlay,
+  useSensor,
+  useSensors,
+  PointerSensor,
+} from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
 // Mock Data //
@@ -274,10 +282,13 @@ function StatCard({ label, value, accent }) {
 }
 
 // Job Card //
-function JobCard({ job, onClick }) {
+function JobCard({ job, onClick, isDragging = false, activeJobId }) {
   const { attributes, listeners, transform, setNodeRef } = useDraggable({
     id: job.id,
   });
+
+  const isBeingDragged = activeJobId === job.id;
+
   const style = {
     transform: CSS.Transform.toString(transform),
   };
@@ -287,9 +298,14 @@ function JobCard({ job, onClick }) {
   return (
     <div
       onClick={() => onClick(job)}
-      className="group bg-slate-800 border border-slate-700/60 rounded-xl p-4
-                 cursor-pointer hover:border-slate-500 hover:-translate-y-0.5
-                 transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-black/30 text-left"
+      className={`group bg-slate-800 border border-slate-700/60 rounded-xl 
+        p-4 text-left transition-all duration-200 shadow-sm
+        ${isBeingDragged ? "opacity-40" : ""}
+        ${
+          isDragging
+            ? "opacity-95 shadow-lg shadow-black/20 cursor-grabbing"
+            : "cursor-pointer hover:border-slate-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30"
+        }`}
       ref={setNodeRef}
       style={style}
       {...listeners}
@@ -334,7 +350,13 @@ function JobCard({ job, onClick }) {
 // Kanban Column
 // isLoading: when true, it will render SkeletonCards instead of real cards
 // This will run when passing isLoading={isLoading}
-function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
+function KanbanColumn({
+  column,
+  jobs,
+  onCardClick,
+  isLoading = false,
+  activeJobId,
+}) {
   const { setNodeRef } = useDroppable({
     id: column.id,
   });
@@ -372,7 +394,12 @@ function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
           <GhostCard />
         ) : (
           jobs.map((job) => (
-            <JobCard key={job.id} job={job} onClick={onCardClick} />
+            <JobCard
+              key={job.id}
+              job={job}
+              onClick={onCardClick}
+              activeJobId={activeJobId}
+            />
           ))
         )}
       </div>
@@ -903,6 +930,7 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [search, setSearch] = useState("");
   const [serviceFilter, setServiceFilter] = useState("all");
+  const [activeJob, setActiveJob] = useState(null); // dnd-kit overlay
 
   // Callback used to keep dismissToast stable when rendering
   // so SuccessToast's useEffect doesn't restart auto-dismiss timer.
@@ -941,6 +969,11 @@ export default function App() {
     [jobs],
   );
 
+  function handleDragStart(event) {
+    const job = jobs.find((j) => j.id === event.active.id);
+    setActiveJob(job);
+  }
+
   function handleDragEnd(event) {
     const { active, over } = event;
 
@@ -958,7 +991,15 @@ export default function App() {
         return j;
       }),
     );
+
+    setActiveJob(null);
   }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+  );
 
   return (
     <div
@@ -1012,7 +1053,11 @@ export default function App() {
          Tablet (md) - 2-column grid
          Desktop (lg+) - all 4 columns side by side */}
 
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext
+          sensors={sensors}
+          onDragEnd={handleDragEnd}
+          onDragStart={handleDragStart}
+        >
           {/* DndContext parent component */}
           <div
             className="flex gap-4 overflow-x-auto pb-4
@@ -1025,10 +1070,25 @@ export default function App() {
                 column={col}
                 jobs={filteredJobs.filter((j) => j.status === col.id)}
                 onCardClick={setSelectedJob}
+                activeJobId={activeJob?.id}
                 // isLoading={isLoading} - Uncomment later when adding backend
               />
             ))}
           </div>
+
+          <DragOverlay dropAnimation={null}>
+            {activeJob ? (
+              <div
+                style={{
+                  width: "280px",
+                  filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.4))",
+                }}
+                className="rounded-xl"
+              >
+                <JobCard job={activeJob} onClick={() => {}} isDragging={true} />
+              </div>
+            ) : null}
+          </DragOverlay>
         </DndContext>
 
         {/* Global empty state - all columns empty after filtering */}
