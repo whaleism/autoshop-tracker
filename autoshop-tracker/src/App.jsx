@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
+import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 // Mock Data //
 const MOCK_JOBS = [
@@ -273,6 +275,13 @@ function StatCard({ label, value, accent }) {
 
 // Job Card //
 function JobCard({ job, onClick }) {
+  const { attributes, listeners, transform, setNodeRef } = useDraggable({
+    id: job.id,
+  });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+  };
+
   const overdue = job.status !== "complete" && isOverdue(job.dueDate);
 
   return (
@@ -281,6 +290,10 @@ function JobCard({ job, onClick }) {
       className="group bg-slate-800 border border-slate-700/60 rounded-xl p-4
                  cursor-pointer hover:border-slate-500 hover:-translate-y-0.5
                  transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-black/30 text-left"
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
     >
       <div className="flex items-center justify-between mb-3">
         <span
@@ -320,8 +333,12 @@ function JobCard({ job, onClick }) {
 
 // Kanban Column
 // isLoading: when true, it will render SkeletonCards instead of real cards
-// This will run when passing isLoading={isLoading} //
+// This will run when passing isLoading={isLoading}
 function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
+  const { setNodeRef } = useDroppable({
+    id: column.id,
+  });
+
   return (
     <div className="flex flex-col min-w-[280px] w-full md:w-72 lg:flex-1">
       {/* Header */}
@@ -347,6 +364,7 @@ function KanbanColumn({ column, jobs, onCardClick, isLoading = false }) {
       <div
         className="flex flex-col gap-3 flex-1 bg-slate-900/40 border border-slate-700/30
                       rounded-xl p-3 min-h-[200px]"
+        ref={setNodeRef}
       >
         {isLoading ? (
           [1, 2].map((n) => <SkeletonCard key={n} />)
@@ -923,6 +941,25 @@ export default function App() {
     [jobs],
   );
 
+  function handleDragEnd(event) {
+    const { active, over } = event;
+
+    // if dropped outside any column, do nothing
+    if (!over) return;
+    // if dropped in same column it started in, do nothing
+    if (active.id === over.id) return;
+    // update job whose id matches ative.id, change its status to over.id
+    setJobs((prev) =>
+      prev.map((j) => {
+        if (j.id === active.id) {
+          // which job are we updating?
+          return { ...j, status: over.id }; // what should the new status be?
+        }
+        return j;
+      }),
+    );
+  }
+
   return (
     <div
       className="min-h-screen bg-slate-950 text-slate-100 text-left"
@@ -974,21 +1011,25 @@ export default function App() {
         Mobile (<md) - horizontal scroll, 280px min per column
          Tablet (md) - 2-column grid
          Desktop (lg+) - all 4 columns side by side */}
-        <div
-          className="flex gap-4 overflow-x-auto pb-4
+
+        <DndContext onDragEnd={handleDragEnd}>
+          {/* DndContext parent component */}
+          <div
+            className="flex gap-4 overflow-x-auto pb-4
                       md:grid md:grid-cols-2 md:overflow-visible
                       lg:flex lg:overflow-x-auto"
-        >
-          {COLUMNS.map((col) => (
-            <KanbanColumn
-              key={col.id}
-              column={col}
-              jobs={filteredJobs.filter((j) => j.status === col.id)}
-              onCardClick={setSelectedJob}
-              // isLoading={isLoading} - Uncomment later when adding backend
-            />
-          ))}
-        </div>
+          >
+            {COLUMNS.map((col) => (
+              <KanbanColumn
+                key={col.id}
+                column={col}
+                jobs={filteredJobs.filter((j) => j.status === col.id)}
+                onCardClick={setSelectedJob}
+                // isLoading={isLoading} - Uncomment later when adding backend
+              />
+            ))}
+          </div>
+        </DndContext>
 
         {/* Global empty state - all columns empty after filtering */}
         {filteredJobs.length === 0 && (
