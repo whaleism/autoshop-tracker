@@ -9,6 +9,7 @@ import {
   PointerSensor,
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { supabase } from "./supabaseClient";
 
 // Mock Data //
 const MOCK_JOBS = [
