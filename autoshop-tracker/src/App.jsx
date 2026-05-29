@@ -925,17 +925,36 @@ ${
 // search - search bar string
 // serviceFilter - "all" | "tint", | "wrap", | "ppf"
 export default function App() {
-  const [jobs, setJobs] = useState(MOCK_JOBS);
+  const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [showIntakeForm, setShowIntakeForm] = useState(false);
   const [toast, setToast] = useState(null);
   const [search, setSearch] = useState("");
   const [serviceFilter, setServiceFilter] = useState("all");
   const [activeJob, setActiveJob] = useState(null); // dnd-kit overlay
+  const [isLoading, setIsLoading] = useState(true);
 
   // Callback used to keep dismissToast stable when rendering
   // so SuccessToast's useEffect doesn't restart auto-dismiss timer.
   const dismissToast = useCallback(() => setToast(null), []);
+
+  // Fetches rows from jobs table (supabase)
+  useEffect(() => {
+    async function fetchJobs() {
+      const { data, error } = await supabase.from("jobs").select("*");
+
+      if (error) {
+        console.error("Failed to fetch jobs:", error.message);
+        setIsLoading(false);
+        return;
+      }
+
+      setJobs(data);
+      setIsLoading(false);
+    }
+
+    fetchJobs();
+  }, []);
 
   function handleNewJob(newJob) {
     setJobs((prev) => [newJob, ...prev]); // prepend: new job appears at the top of Intake
@@ -1072,7 +1091,7 @@ export default function App() {
                 jobs={filteredJobs.filter((j) => j.status === col.id)}
                 onCardClick={setSelectedJob}
                 activeJobId={activeJob?.id}
-                // isLoading={isLoading} - Uncomment later when adding backend
+                isLoading={isLoading}
               />
             ))}
           </div>
