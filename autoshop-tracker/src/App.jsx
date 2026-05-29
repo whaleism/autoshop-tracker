@@ -134,7 +134,7 @@ const MOCK_JOBS = [
     serviceDetail: "Full Front PPF - Self-Healing Matte",
     status: "quality-check",
     priority: "high",
-    createAt: "2026-05-13",
+    createdAt: "2026-05-13",
     dueDate: "2026-05-16",
     technician: "Say P.",
     notes:
