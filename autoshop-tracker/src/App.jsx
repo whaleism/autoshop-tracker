@@ -956,7 +956,13 @@ export default function App() {
     fetchJobs();
   }, []);
 
-  function handleNewJob(newJob) {
+  async function handleNewJob(newJob) {
+    const { error } = await supabase.from("jobs").insert([newJob]);
+
+    if (error) {
+      console.error(error.message);
+      return;
+    }
     setJobs((prev) => [newJob, ...prev]); // prepend: new job appears at the top of Intake
     setShowIntakeForm(false);
     setToast(`Order for ${newJob.customerName} added to Intake`);
