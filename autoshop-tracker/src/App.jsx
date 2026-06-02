@@ -1000,14 +1000,20 @@ export default function App() {
     setActiveJob(job);
   }
 
-  function handleDragEnd(event) {
+  async function handleDragEnd(event) {
     const { active, over } = event;
 
     // if dropped outside any column, do nothing
     if (!over) return;
     // if dropped in same column it started in, do nothing
     if (active.id === over.id) return;
-    // update job whose id matches ative.id, change its status to over.id
+
+    const { error } = await supabase
+      .from("jobs")
+      .update({ status: over.id })
+      .eq("id", active.id);
+
+    // update job whose id matches active.id, change its status to over.id
     setJobs((prev) =>
       prev.map((j) => {
         if (j.id === active.id) {
