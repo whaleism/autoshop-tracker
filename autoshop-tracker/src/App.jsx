@@ -11,155 +11,6 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { supabase } from "./supabaseClient";
 
-// Mock Data //
-const MOCK_JOBS = [
-  {
-    id: "job-1",
-    customerName: "Marcus Webb",
-    phone: "312-555-0182",
-    plateNumber: "KXT-482",
-    year: 2021,
-    make: "Acura",
-    model: "NSX Type-S",
-    color: "Gotham Gray Matte Metallic",
-    serviceType: "tint",
-    serviceDetail: "Full Ceramic Tint - 20%",
-    status: "intake",
-    priority: "normal",
-    createdAt: "2026-05-10",
-    dueDate: "2026-05-14",
-    technician: "Xaiver H.",
-    notes: "Customer wants darkest legal tint. Check local ordinance first.",
-  },
-  {
-    id: "job-2",
-    customerName: "Sofia Reyes",
-    phone: "773-555-0294",
-    plateNumber: "MPR-719",
-    year: 2023,
-    make: "Ferrai",
-    model: "296 GTB",
-    color: "Rosso Corsa",
-    serviceType: "wrap",
-    serviceDetail: "Full Body Wrap - Matte Olive",
-    status: "in-progress",
-    priority: "high",
-    createdAt: "2026-05-09",
-    dueDate: "2026-05-13",
-    technician: "Julian B.",
-    notes: "Partial panels already done. Finishing hood and roof today.",
-  },
-  {
-    id: "job-3",
-    customerName: "James Okafor",
-    phone: "847-555-0371",
-    plateNumber: "WLB-356",
-    year: 2020,
-    make: "Porsche",
-    model: "911 GT3 RS",
-    color: "Python Green",
-    serviceType: "tint",
-    serviceDetail: "Windshield + Front Windows - 35%",
-    status: "in-progress",
-    priority: "normal",
-    createdAt: "2026-05-11",
-    dueDate: "2026-05-15",
-    technician: "Xaiver H.",
-    notes: "",
-  },
-  {
-    id: "job-4",
-    customerName: "Priya Nair",
-    phone: "630-555-0445",
-    plateNumber: "JVF-804",
-    year: 2020,
-    make: "Chevrolet",
-    model: "Corvette Z06",
-    color: "Amplify Orange Tintcoat",
-    serviceType: "wrap",
-    serviceDetail: "Roof Wrap - Gloss Carbon Fiber",
-    status: "quality-check",
-    priority: "normal",
-    createdAt: "2026-05-08",
-    dueDate: "2026-05-13",
-    technician: "Julian B.",
-    notes: "Inspect edges on A-pillar. Customer is very detail-oriented.",
-  },
-  {
-    id: "job-5",
-    customerName: "Terrence Hall",
-    phone: "321-550-0519",
-    plateNumber: "DZN-261",
-    year: 2019,
-    make: "Lamborghini",
-    model: "Revuelto",
-    color: "Viola Pasifae",
-    serviceType: "tint",
-    serviceDetail: "Full Vehicle Tint - 5% Limo",
-    status: "complete",
-    priority: "low",
-    createdAt: "2026-05-07",
-    dueDate: "2026-05-12",
-    technician: "Xaiver H.",
-    notes: "Picked up. Customer left 5-star review.",
-  },
-  {
-    id: "job-6",
-    customerName: "Aaliyah Brooks",
-    phone: "773-555-0623",
-    plateNumber: "RSH-537",
-    year: 2024,
-    make: "Aston Martin",
-    model: "Vantage",
-    color: "Podium Green",
-    serviceType: "wrap",
-    serviceDetail: "Full Body Wrap - Satin Black",
-    status: "intake",
-    priority: "high",
-    createdAt: "2026-05-12",
-    dueDate: "2026-05-17",
-    technician: "Unassigned",
-    notes: "High-value vehicle. Assign senior tech.",
-  },
-  {
-    id: "job-7",
-    customerName: "Nadia Petrov",
-    phone: "312-555-0834",
-    plateNumber: "THZ-641",
-    year: 2023,
-    make: "Audi",
-    model: "R8 V10 Performance",
-    color: "Nardo Gray",
-    serviceType: "ppf",
-    serviceDetail: "Full Front PPF - Self-Healing Matte",
-    status: "quality-check",
-    priority: "high",
-    createdAt: "2026-05-13",
-    dueDate: "2026-05-16",
-    technician: "Say P.",
-    notes:
-      "High-gloss paint underneath. Handle with extra care during install.",
-  },
-  {
-    id: "job-8",
-    customerName: "Derek Lim",
-    phone: "847-555-0701",
-    plateNumber: "GBC-948",
-    year: 2021,
-    make: "Nissan",
-    model: "GTR",
-    color: "Bayside Blue",
-    serviceType: "tint",
-    serviceDetail: "Rear Windows Only - 20%",
-    status: "complete",
-    priority: "low",
-    createdAt: "2026-05-06",
-    dueDate: "2026-05-10",
-    technician: "Julian B.",
-    notes: "",
-  },
-];
-
 // Config //
 const COLUMNS = [
   { id: "intake", label: "Intake", color: "#60a5fa" },
@@ -190,8 +41,8 @@ const EMPTY_FORM = {
 
 // Utils //
 function getPriorityStyle(p) {
-  if (p === "high") return "bg-red-500/20 text-red border-red-500/30";
-  if (p === "low") return "bg-slate-500/20 text-slate-400 border slate-500/30";
+  if (p === "high") return "bg-red-500/20 text-red-300 border-red-500/30";
+  if (p === "low") return "bg-slate-500/20 text-slate-400 border-slate-500/30";
   return "bg-amber-500/20 text-amber-300 border-amber-500/30";
 }
 
@@ -906,7 +757,7 @@ ${
       <button
         onClick={onNewOrder}
         className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
-                    text-sm font-b text-white bg-blue-600 hover:bg-blue-500
+                    text-sm font-bold text-white bg-blue-600 hover:bg-blue-500
                     border border-blue-500 shadow-lg shadow-blue-900/20
                     transition-all whitespace-nowrap"
       >
@@ -1013,12 +864,17 @@ export default function App() {
       .update({ status: over.id })
       .eq("id", active.id);
 
+    if (error) {
+      console.log(error.message);
+      setActiveJob(null);
+      return;
+    }
+
     // update job whose id matches active.id, change its status to over.id
     setJobs((prev) =>
       prev.map((j) => {
         if (j.id === active.id) {
-          // which job are we updating?
-          return { ...j, status: over.id }; // what should the new status be?
+          return { ...j, status: over.id }; // Optimistic update that only runs after confirmed Supabase write
         }
         return j;
       }),
@@ -1117,7 +973,12 @@ export default function App() {
                 }}
                 className="rounded-xl"
               >
-                <JobCard job={activeJob} onClick={() => {}} isDragging={true} />
+                <JobCard
+                  job={activeJob}
+                  onClick={() => {}}
+                  isDragging={true}
+                  activeJobId={activeJob.id}
+                />
               </div>
             ) : null}
           </DragOverlay>
