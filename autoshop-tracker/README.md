@@ -4,7 +4,7 @@ A job management dashboard built for automotive tint, wrap, and PPF shops. Shop 
 
 ## 🔗 Live Demo
 
-[autoshop-tracker.vercel.app](https://my-link-here.vercel.app)
+[autoshop-tracker.vercel.app](https://autoshop-tracker-khaki.vercel.app/)
 
 ## 📸 Preview
 
